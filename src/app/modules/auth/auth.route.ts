@@ -3,6 +3,7 @@ imp
 import { AuthValidations } from "./auth.validation";
 import validateRequest from "../../middlewares/validateRequest";
 import { AuthController } from "./auth.controller";
+import { UserValidations } from "../user/user.validation";
 
 const router = Router();
 
