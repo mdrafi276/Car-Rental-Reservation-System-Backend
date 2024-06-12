@@ -4,8 +4,14 @@ import bcrypt from 'bcrypt'
 
 const userSchema = new Schema<TUser>(
     {
-        name: { type: String, required: true },
-        email: { type: String, required: true },
+        name: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true
+        },
         role: {
             type: String,
             enum: ["user", "admin"],
@@ -39,8 +45,9 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-userSchema.methods.comparePassword = async function (password: string) {
-    return await bcrypt.compare(password, this.password);
-};
+userSchema.post('save', function (doc, next) {
+    doc.password = '';
+    next();
+});
 
 export const User = model<TUser>("User", userSchema);

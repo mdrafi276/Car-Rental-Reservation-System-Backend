@@ -11,6 +11,11 @@ router.post(
     validateRequest(UserValidations.userValidationSchema),
     userController.signup,
 );
+router.post(
+    '/signin',
+    validateRequest(UserValidations.userValidationSchema),
+    userController.signup,
+);
 
 
 

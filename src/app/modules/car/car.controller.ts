@@ -3,7 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { CarServices } from "./car.service";
-//create car 
+
 const createCar = catchAsync(async (req: Request, res: Response) => {
     const result = await CarServices.createCarIntoDB(req.body);
 
@@ -14,14 +14,14 @@ const createCar = catchAsync(async (req: Request, res: Response) => {
         data: result,
     });
 });
-// get All car 
 const getAllCar = catchAsync(async (req: Request, res: Response) => {
     const result = await CarServices.getAllCarFromDB();
+
     if (!result) {
         res.status(httpStatus.NOT_FOUND).json({
             success: false,
             statusCode: httpStatus.NOT_FOUND,
-            message: "No Data Found",
+            message: " Data not Found",
             data: [],
         });
     }
@@ -33,7 +33,6 @@ const getAllCar = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-// get single car 
 const getSingleCar = catchAsync(async (req: Request, res: Response) => {
     const id = req.params.id;
     const result = await CarServices.getSingleCarFromDB(id);
@@ -41,7 +40,7 @@ const getSingleCar = catchAsync(async (req: Request, res: Response) => {
         res.status(httpStatus.NOT_FOUND).json({
             success: false,
             statusCode: httpStatus.NOT_FOUND,
-            message: "No Data Found",
+            message: " Data not Found",
             data: [],
         });
     }
@@ -52,10 +51,42 @@ const getSingleCar = catchAsync(async (req: Request, res: Response) => {
         data: result,
     });
 });
+const updateCar = catchAsync(async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const result = await CarServices.updateCarIntoDB(id, req.body);
 
-// exprt car controller
+    if (!result) {
+        res.status(httpStatus.NOT_FOUND).json({
+            success: false,
+            statusCode: httpStatus.NOT_FOUND,
+            message: " Data not Found",
+            data: [],
+        });
+    }
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Car updated successfully",
+        data: result,
+    });
+});
+
+// delete car
+const deleteCar = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await CarServices.deleteCarFromDB(id)
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Car deleted successfully",
+        data: result,
+    });
+})
+
 export const CarController = {
     createCar,
     getAllCar,
-    getSingleCar
+    getSingleCar,
+    updateCar,
+    deleteCar
 };

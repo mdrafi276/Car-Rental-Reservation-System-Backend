@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../errors/AppError";
 import httpStatus from "http-status";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../config";
 import { USER_ROLES } from "../modules/user/user.constant";
 import { AuthError } from "../errors/authError";
