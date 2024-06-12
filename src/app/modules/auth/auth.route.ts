@@ -1,5 +1,5 @@
 import { Router } from "express";
-imp
+
 import { AuthValidations } from "./auth.validation";
 import validateRequest from "../../middlewares/validateRequest";
 import { AuthController } from "./auth.controller";

@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { TUser } from "./user.interface";
+import bcrypt from 'bcrypt'
 
 const userSchema = new Schema<TUser>(
     {
@@ -10,9 +11,20 @@ const userSchema = new Schema<TUser>(
             enum: ["user", "admin"],
             required: true,
         },
-        password: { type: String, required: true, select: 0 },
-        phone: { type: String, required: true },
-        address: { type: String, required: true },
+        password: {
+            type: String,
+            required: true,
+            select: 0
+
+        },
+        phone: {
+            type: String,
+            required: true
+        },
+        address: {
+            type: String,
+            required: true
+        },
     },
     {
         timestamps: true,
@@ -20,9 +32,15 @@ const userSchema = new Schema<TUser>(
 );
 
 //remove password string after saving data
-userSchema.post("save", function (doc, next) {
-    doc.password = "";
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
     next();
 });
+
+userSchema.methods.comparePassword = async function (password: string) {
+    return await bcrypt.compare(password, this.password);
+};
 
 export const User = model<TUser>("User", userSchema);

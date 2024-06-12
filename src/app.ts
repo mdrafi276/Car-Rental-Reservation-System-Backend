@@ -7,28 +7,24 @@ import express, { Application } from 'express';
 import router from './app/route';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import notFound from './app/middlewares/notFound';
-import cookieParser from 'cookie-parser';
-
+// import cookieParser from 'cookie-parser';
 const app: Application = express();
 
 //parsers
 app.use(express.json());
-app.use(cookieParser())
-app.use(cors({ origin: ['http;//loclhost:5173/api/v1'] }));
+// app.use(cookieParser())
+app.use(cors({ origin: ['http://loclhost:5173/api/v1'] }));
 
 // application routes
 app.use('/api/v1', router);
 
 // app.get('/', test);
-app.get("/", (req, res) => {
+app.get("/api/v1", (req, res) => {
     res.json({
         message: " Car Rental Reservation System API Service is Running!",
     });
 });
-
-
 app.use(globalErrorHandler);
-
 //Not Found
 app.use(notFound);
 
