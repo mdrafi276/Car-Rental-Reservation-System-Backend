@@ -7,6 +7,7 @@ import config from "../config";
 import { USER_ROLES } from "../modules/user/user.constant";
 import { AuthError } from "../errors/authError";
 import { User } from "../modules/user/user.model";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 
 export const auth = (...requiredRoles: (keyof typeof USER_ROLES)[]) => {

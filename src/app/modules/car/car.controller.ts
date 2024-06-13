@@ -3,7 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { CarServices } from "./car.service";
-
+//  controller fro crearing a car
 const createCar = catchAsync(async (req: Request, res: Response) => {
     const result = await CarServices.createCarIntoDB(req.body);
 
@@ -14,6 +14,7 @@ const createCar = catchAsync(async (req: Request, res: Response) => {
         data: result,
     });
 });
+//  controller for get all car
 const getAllCar = catchAsync(async (req: Request, res: Response) => {
     const result = await CarServices.getAllCarFromDB();
 
@@ -32,7 +33,7 @@ const getAllCar = catchAsync(async (req: Request, res: Response) => {
         data: result,
     });
 });
-
+//   controllers for get singel car
 const getSingleCar = catchAsync(async (req: Request, res: Response) => {
     const id = req.params.id;
     const result = await CarServices.getSingleCarFromDB(id);
@@ -51,6 +52,7 @@ const getSingleCar = catchAsync(async (req: Request, res: Response) => {
         data: result,
     });
 });
+//controller for update a car
 const updateCar = catchAsync(async (req: Request, res: Response) => {
     const id = req.params.id;
     const result = await CarServices.updateCarIntoDB(id, req.body);
@@ -71,7 +73,7 @@ const updateCar = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-// delete car
+//  controller for deleting a car
 const deleteCar = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const result = await CarServices.deleteCarFromDB(id)
@@ -83,10 +85,25 @@ const deleteCar = catchAsync(async (req: Request, res: Response) => {
     });
 })
 
+// controllers for return a car
+const returnCar = catchAsync(async (req: Request, res: Response) => {
+    const bookingData = req.body;
+    console.log(" This is booking data", bookingData);
+    const result = await CarServices.returnCarFromDB(bookingData);
+    //send response from send response components
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Car booked successfully",
+        data: result,
+    });
+});
+//export car controllers
 export const CarController = {
     createCar,
     getAllCar,
     getSingleCar,
     updateCar,
-    deleteCar
+    deleteCar,
+    returnCar
 };
