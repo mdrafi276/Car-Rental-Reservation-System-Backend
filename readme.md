@@ -71,13 +71,12 @@ The server should be running on http://localhost:5000.
 ### 🛍️ Product Management
 
 #### 1. Create a New Product
-
-- **Endpoint:** `/api/products`
+- **Endpoint:** `/api/auth/signup`
 - **Method:** `POST`
 
 #### 2. Retrieve All Products
 
-- **Endpoint:** `/api/products`
+- **Endpoint:** `/api/auth/signin`
 - **Method:** `GET`
 
 #### 3. Retrieve Specific Product by ID
