@@ -16,10 +16,10 @@ app.use(cookieParser())
 app.use(cors({ origin: ['http://loclhost:5173/api/v1'] }));
 
 // application routes
-app.use('/api/v1', router);
+app.use('/api', router);
 
 // app.get('/', test);
-app.get("/api/v1", (req, res) => {
+app.get("/api", (req, res) => {
     res.json({
         message: " Car Rental Reservation System API Service is Running!",
     });

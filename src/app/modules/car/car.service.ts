@@ -3,7 +3,8 @@ import AppError from "../../errors/AppError";
 import { TCar, TReturnCar } from "./car.interface";
 import { Car } from "./car.model";
 import { Booking } from "../booking/booking.model";
-import { convertToHours } from "../../utils/convertToHourse";
+import { convertTimeToHours } from "../../utils/convertToHourse";
+import mongoose from "mongoose";
 
 //create car service
 const createCarIntoDB = async (carData: TCar) => {
@@ -17,7 +18,11 @@ const getAllCarFromDB = async () => {
 };
 // get single car form database 
 const getSingleCarFromDB = async (id: string) => {
-    const result = await Car.findById(id);
+    const isCarExists = await Car.findById(id);
+    if (!isCarExists) {
+        throw new AppError(httpStatus.NOT_FOUND, 'Car is not found');
+    }
+    const result = isCarExists;
     return result;
 };
 
@@ -44,43 +49,58 @@ const deleteCarFromDB = async (id: string) => {
     return result;
 };
 const returnCarFromDB = async (payload: TReturnCar) => {
-    const isBookingExists = await Booking.findById(payload.bookingId);
+    const session = await mongoose.startSession();
+    try {
+        const isBookingExists = await Booking.findById(payload.bookingId).session(session);
 
-    if (!isBookingExists) {
-        throw new AppError(httpStatus.NOT_FOUND, "Booking is not found !");
-    }
-    const isCarExists = await Car.findByIdAndUpdate(
-        isBookingExists.car,
-        {
-            status: "available",
-        },
-        {
-            new: true,
+        if (!isBookingExists) {
+            throw new AppError(httpStatus.NOT_FOUND, "Booking is not found !");
         }
-    );
-
-    if (!isCarExists) {
-        throw new AppError(httpStatus.NOT_FOUND, "Car is not found !");
-    }
-    const startHours = convertToHours(isBookingExists.startTime);
-    const endHours = convertToHours(payload.endTime);
-    let durationHours = endHours - startHours;
-    if (durationHours < 0) {
-        durationHours += 24;
-    }
-
-    const totalCost = Number(durationHours) * Number(isCarExists.pricePerHour);
-    const updatedBooking = await Booking.findByIdAndUpdate(
-        payload.bookingId,
-        {
-            endTime: payload.endTime,
-            totalCost,
-        },
-        {
-            new: true,
+        const isCarExists = await Car.findByIdAndUpdate(
+            isBookingExists.car,
+            {
+                status: "available",
+            },
+            {
+                new: true,
+                session,
+            }
+        );
+        if (!isCarExists) {
+            throw new AppError(httpStatus.NOT_FOUND, "Car is not found !");
         }
-    ).populate("user car");
-    return updatedBooking;
+        const startHours = convertTimeToHours(isBookingExists.startTime);
+        const endHours = convertTimeToHours(payload.endTime);
+        let durationHours = endHours - startHours;
+        if (durationHours < 0) {
+            durationHours += 24;
+        }
+        const totalCost = Number(durationHours) * Number(isCarExists.pricePerHour);
+        const updatedBooking = await Booking.findByIdAndUpdate(
+            payload.bookingId,
+            {
+                endTime: payload.endTime,
+                totalCost,
+            },
+            {
+                new: true,
+                session,
+            }
+        ).populate("user car");
+        await session.commitTransaction();
+        await session.endSession();
+        return updatedBooking;
+    } catch (err) {
+        await session.abortTransaction();
+        await session.endSession();
+        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to return bookings');
+    }
+
+
+
+
+
+
 };
 // export car services
 export const CarServices = {

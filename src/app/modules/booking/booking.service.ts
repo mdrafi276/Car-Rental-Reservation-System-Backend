@@ -13,7 +13,6 @@ const createBookingIntoDB = async (payload: IBooking) => {
         },
         { new: true }
     );
-
     if (!isCarExists) {
         throw new AppError(httpStatus.NOT_FOUND, "Car is not found !");
     }

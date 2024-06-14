@@ -23,7 +23,9 @@ const createBooking = catchAsync(async (req: Request, res: Response) => {
     ) as JwtPayload;
 
     const user = await User.findOne({ email: decoded.email });
-
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, "User not found");
+    }
     const bookingObj = {
         ...bookingData,
         user: user?._id,

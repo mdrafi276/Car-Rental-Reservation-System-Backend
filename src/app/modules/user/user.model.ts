@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { TUser } from "./user.interface";
 import bcrypt from 'bcrypt'
+import config from "../../config";
 
 const userSchema = new Schema<TUser>(
     {
@@ -37,14 +38,25 @@ const userSchema = new Schema<TUser>(
     }
 );
 
-//remove password string after saving data
-userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+
+//pre save middleware / hook
+userSchema.pre("save", async function (next) {
+    const user = this;
+
+    //hashing password and save in database
+    user.password = await bcrypt.hash(
+        user.password,
+        Number(config.bcrypt_salt_rounds)
+    );
+
     next();
 });
 
+//remove password string after saving data
+userSchema.post("save", function (doc, next) {
+    doc.password = "";
+    next();
+});
 userSchema.post('save', function (doc, next) {
     doc.password = '';
     next();
