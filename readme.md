@@ -79,42 +79,7 @@ The server should be running on http://localhost:5000.
 
 #### 3. Retrieve Specific Product by ID
 
-- **Endpoint:** `/api/products/:productId`
-- **Method:** `GET`
 
-#### 4. Update Product Information
-
-- **Endpoint:** `/api/products/:productId`
-- **Method:** `PUT`
-
-#### 5. Delete a Product
-
-- **Endpoint:** `/api/products/:productId`
-- **Method:** `DELETE`
-
-#### 6. Search a Product
-
-- **Endpoint:** `/api/products?searchTerm=iphone`
-- **Method:** `GET`
-
-### 🛒 Order Management
-
-#### 1. Create a New Order
-
-- **Endpoint**: `/api/orders`
-- **Method**: `POST`
-
-#### 2. Retrieve All Orders
-
-- **Endpoint**: `/api/orders`
-- **Method**: `GET`
-
-#### 3. Retrieve Orders by User Email
-
-- **Endpoint**: `/api/orders?email=level2@programming-hero.com`
-- **Method**: `GET`
-
-# linting
 
 ## Ensure the code adheres to a consistent style by running:
 
