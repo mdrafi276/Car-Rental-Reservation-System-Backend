@@ -70,9 +70,7 @@ The server should be running on http://localhost:5000.
 ## Available API Endpoints
 ### 🛍️ Car Management
 
-#### 1. Create a New Product
-- **Endpoint:** `/api/auth/signup`
-- **Method:** `POST`
+`
 
 #### 2. Retrieve All Products
 
