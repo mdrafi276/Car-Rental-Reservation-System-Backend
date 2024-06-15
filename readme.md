@@ -1,7 +1,7 @@
 
 # Car Rental Reservation System Backend 
 
-# Installation
+
 This is the backend for a Car Rental Reservation System. It handles CRUD operations for cars, bookings, user authentication, and authorization. The project is built with Node.js, Express.js, TypeScript, and MongoDB.
 
 ## Technologies Used
@@ -22,7 +22,6 @@ This is the backend for a Car Rental Reservation System. It handles CRUD operati
 - Middleware for Error Handling
 - Input Validation using Zod
 - Transaction and Rollback (if necessary)
-
 
 - **Order Management**
   - Create a new order
