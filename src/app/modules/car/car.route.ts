@@ -21,16 +21,17 @@ router.get("/", CarController.getAllCar);
 router.get("/:id", CarController.getSingleCar);
 
 router.put(
-    "/:id",
-    auth(USER_ROLES.admin),
-    validateRequest(CarValidations.updateCarValidationSchema),
-    CarController.updateCar
-);
-router.put(
     "/return",
     auth(USER_ROLES.admin),
     validateRequest(CarValidations.returnCarValidationSchema),
-    CarController.returnCar
+    CarController.retrunAndUpdate
+);
+
+router.put(
+    "/:id",
+    auth(USER_ROLES.admin),
+    validateRequest(CarValidations.updateCarValidationSchema),
+    CarController.retrunAndUpdate
 );
 router.delete("/:id", CarController.deleteCar)
 

@@ -53,25 +53,25 @@ const getSingleCar = catchAsync(async (req: Request, res: Response) => {
     });
 });
 //controller for update a car
-const updateCar = catchAsync(async (req: Request, res: Response) => {
-    const id = req.params.id;
-    const result = await CarServices.updateCarIntoDB(id, req.body);
+// const updateCar = catchAsync(async (req: Request, res: Response) => {
+//     const id = req.params.id;
+//     const result = await CarServices.updateCarIntoDB(id, req.body);
 
-    if (!result) {
-        res.status(httpStatus.NOT_FOUND).json({
-            success: false,
-            statusCode: httpStatus.NOT_FOUND,
-            message: " Data not Found",
-            data: [],
-        });
-    }
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "Car updated successfully",
-        data: result,
-    });
-});
+//     if (!result) {
+//         res.status(httpStatus.NOT_FOUND).json({
+//             success: false,
+//             statusCode: httpStatus.NOT_FOUND,
+//             message: " Data not Found",
+//             data: [],
+//         });
+//     }
+//     sendResponse(res, {
+//         success: true,
+//         statusCode: httpStatus.OK,
+//         message: "Car updated successfully",
+//         data: result,
+//     });
+// });
 
 //  controller for deleting a car
 const deleteCar = catchAsync(async (req: Request, res: Response) => {
@@ -86,24 +86,63 @@ const deleteCar = catchAsync(async (req: Request, res: Response) => {
 })
 
 // controllers for return a car
-const returnCar = catchAsync(async (req: Request, res: Response) => {
-    const bookingData = req.body;
-    console.log(" This is booking data", bookingData);
-    const result = await CarServices.returnCarFromDB(bookingData);
-    //send response from send response components
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "Car booked successfully",
-        data: result,
-    });
-});
+// const returnCar = catchAsync(async (req: Request, res: Response) => {
+//     const bookingData = req.body;
+//     console.log(" This is booking data", bookingData);
+//     const result = await CarServices.returnCarFromDB(bookingData);
+//     //send response from send response components
+//     sendResponse(res, {
+//         success: true,
+//         statusCode: httpStatus.OK,
+//         message: "Car booked successfully",
+//         data: result,
+//     });
+// });
+
+const retrunAndUpdate = catchAsync(async (req: Request, res: Response) => {
+    const path = req.path == '/return';
+    if (path) {
+
+        const bookingData = req.body;
+        const result = await CarServices.returnCarFromDB(bookingData);
+        //send response from send response components
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "Car booked successfully",
+            data: result,
+        });
+
+
+    } else {
+
+        const id = req.params.id;
+        const result = await CarServices.updateCarIntoDB(id, req.body);
+
+        if (!result) {
+            res.status(httpStatus.NOT_FOUND).json({
+                success: false,
+                statusCode: httpStatus.NOT_FOUND,
+                message: " Data not Found",
+                data: [],
+            });
+        }
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "Car updated successfully",
+            data: result,
+        });
+
+
+
+    }
+})
 //export car controllers
 export const CarController = {
     createCar,
     getAllCar,
     getSingleCar,
-    updateCar,
     deleteCar,
-    returnCar
+    retrunAndUpdate
 };

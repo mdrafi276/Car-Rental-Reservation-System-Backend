@@ -4,7 +4,7 @@ import { TCar, TReturnCar } from "./car.interface";
 import { Car } from "./car.model";
 import { Booking } from "../booking/booking.model";
 import { convertTimeToHours } from "../../utils/convertToHourse";
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
 //create car service
 const createCarIntoDB = async (carData: TCar) => {
@@ -49,52 +49,48 @@ const deleteCarFromDB = async (id: string) => {
     return result;
 };
 const returnCarFromDB = async (payload: TReturnCar) => {
-    const session = await mongoose.startSession();
-    try {
-        const isBookingExists = await Booking.findById(payload.bookingId).session(session);
+    // const session = await mongoose.startSession();
 
-        if (!isBookingExists) {
-            throw new AppError(httpStatus.NOT_FOUND, "Booking is not found !");
-        }
-        const isCarExists = await Car.findByIdAndUpdate(
-            isBookingExists.car,
-            {
-                status: "available",
-            },
-            {
-                new: true,
-                session,
-            }
-        );
-        if (!isCarExists) {
-            throw new AppError(httpStatus.NOT_FOUND, "Car is not found !");
-        }
-        const startHours = convertTimeToHours(isBookingExists.startTime);
-        const endHours = convertTimeToHours(payload.endTime);
-        let durationHours = endHours - startHours;
-        if (durationHours < 0) {
-            durationHours += 24;
-        }
-        const totalCost = Number(durationHours) * Number(isCarExists.pricePerHour);
-        const updatedBooking = await Booking.findByIdAndUpdate(
-            payload.bookingId,
-            {
-                endTime: payload.endTime,
-                totalCost,
-            },
-            {
-                new: true,
-                session,
-            }
-        ).populate("user car");
-        await session.commitTransaction();
-        await session.endSession();
-        return updatedBooking;
-    } catch (err) {
-        await session.abortTransaction();
-        await session.endSession();
-        throw new AppError(httpStatus.BAD_REQUEST, 'Failed to return bookings');
+    const isBookingExists = await Booking.findById(payload.bookingId);
+
+    if (!isBookingExists) {
+        throw new AppError(httpStatus.NOT_FOUND, "Booking is not found !");
     }
+    const isCarExists = await Car.findByIdAndUpdate(
+        isBookingExists.car,
+        {
+            status: "available",
+        },
+        {
+            new: true,
+
+        }
+    );
+    if (!isCarExists) {
+        throw new AppError(httpStatus.NOT_FOUND, "Car is not found !");
+    }
+    const startHours = convertTimeToHours(isBookingExists.startTime);
+    const endHours = convertTimeToHours(payload.endTime);
+    let durationHours = endHours - startHours;
+    if (durationHours < 0) {
+        durationHours += 24;
+    }
+    const totalCost = Number(durationHours) * Number(isCarExists.pricePerHour);
+    const updatedBooking = await Booking.findByIdAndUpdate(
+        payload.bookingId,
+        {
+            endTime: payload.endTime,
+            totalCost,
+        },
+        {
+            new: true,
+
+        }
+    ).populate("user car");
+    // await session.commitTransaction();
+    // await session.endSession();
+    return updatedBooking;
+
 
 
 
