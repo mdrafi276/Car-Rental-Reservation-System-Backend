@@ -12,7 +12,7 @@ This is the backend for a Car Rental Reservation System. It handles CRUD operati
 - Mongoose
 - JWT
 - Zod
-- Bcryptjs
+- Bcrypt
 
 
 ## Features
@@ -117,7 +117,7 @@ $ npm install
 ```bash
 PORT=5000
 DB_URI="mongodb://localhost:27017/Car-Rental-Reservation"
-JWT_SECRET=your_jwt_secret
+JWT_ACCRESS_SECRET= your jwt secret token
 
 ```
 # Running the app
