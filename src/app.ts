@@ -28,4 +28,6 @@ app.use(globalErrorHandler);
 //Not Found
 app.use(notFound);
 
+//  export app
 export default app;
+
