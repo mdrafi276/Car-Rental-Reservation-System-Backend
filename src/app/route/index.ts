@@ -12,6 +12,10 @@ const moduleRoutes = [
         route: AuthRoutes,
     },
     {
+        path: "/users",
+        route: UserRoutes,
+      },
+    {
         path: "/cars",
         route: CarRoutes,
     },
@@ -19,14 +23,7 @@ const moduleRoutes = [
         path: "/bookings",
         route: BookingRoutes,
     },
-    // {
-    //     path: "/bookings",
-    //     route: BookingRoutes,
-    // },
-    // {
-    //     path: "/bookings",
-    //     route: BookingRoutes,
-    // },
+    
 
 
 

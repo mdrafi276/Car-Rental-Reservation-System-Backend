@@ -25,6 +25,7 @@ const signin = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+
 export const AuthController = {
     register,
     signin
